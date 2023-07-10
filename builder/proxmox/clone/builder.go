@@ -61,6 +61,7 @@ func (*cloneVMCreator) Create(vmRef *proxmoxapi.VmRef, config proxmoxapi.ConfigQ
 
 	// cloud-init options
 	config.CIuser = comm.SSHUsername
+	config.CIpassword = comm.SSHPassword
 	config.Sshkeys = string(comm.SSHPublicKey)
 	config.Nameserver = c.Nameserver
 	config.Searchdomain = c.Searchdomain
