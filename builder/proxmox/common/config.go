@@ -256,8 +256,8 @@ func (c *Config) Prepare(upper interface{}, raws ...interface{}) ([]string, []st
 		}
 	}
 	if c.SCSIController == "" {
-		log.Printf("SCSI controller not set, using default 'lsi'")
-		c.SCSIController = "lsi"
+		log.Printf("SCSI controller not set, using default 'virtio-scsi-pci'")
+		c.SCSIController = "virtio-scsi-pci"
 	}
 
 	errs = packersdk.MultiErrorAppend(errs, c.Comm.Prepare(&c.Ctx)...)
