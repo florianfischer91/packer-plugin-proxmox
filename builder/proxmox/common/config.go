@@ -48,26 +48,27 @@ type Config struct {
 	VMName string `mapstructure:"vm_name"`
 	VMID   int    `mapstructure:"vm_id"`
 
-	Boot           string         `mapstructure:"boot"`
-	Memory         int            `mapstructure:"memory"`
-	BalloonMinimum int            `mapstructure:"ballooning_minimum"`
-	Cores          int            `mapstructure:"cores"`
-	CPUType        string         `mapstructure:"cpu_type"`
-	Sockets        int            `mapstructure:"sockets"`
-	Numa           bool           `mapstructure:"numa"`
-	OS             string         `mapstructure:"os"`
-	BIOS           string         `mapstructure:"bios"`
-	EFIConfig      efiConfig      `mapstructure:"efi_config"`
-	EFIDisk        string         `mapstructure:"efidisk"`
-	Machine        string         `mapstructure:"machine"`
-	VGA            vgaConfig      `mapstructure:"vga"`
-	NICs           []NICConfig    `mapstructure:"network_adapters"`
-	Disks          []diskConfig   `mapstructure:"disks"`
-	Serials        []string       `mapstructure:"serials"`
-	Agent          config.Trilean `mapstructure:"qemu_agent"`
-	SCSIController string         `mapstructure:"scsi_controller"`
-	Onboot         bool           `mapstructure:"onboot"`
-	DisableKVM     bool           `mapstructure:"disable_kvm"`
+	Boot                   string         `mapstructure:"boot"`
+	Memory                 int            `mapstructure:"memory"`
+	BalloonMinimum         int            `mapstructure:"ballooning_minimum"`
+	Cores                  int            `mapstructure:"cores"`
+	CPUType                string         `mapstructure:"cpu_type"`
+	Sockets                int            `mapstructure:"sockets"`
+	Numa                   bool           `mapstructure:"numa"`
+	OS                     string         `mapstructure:"os"`
+	BIOS                   string         `mapstructure:"bios"`
+	EFIConfig              efiConfig      `mapstructure:"efi_config"`
+	EFIDisk                string         `mapstructure:"efidisk"`
+	Machine                string         `mapstructure:"machine"`
+	VGA                    vgaConfig      `mapstructure:"vga"`
+	NICs                   []NICConfig    `mapstructure:"network_adapters"`
+	Disks                  []diskConfig   `mapstructure:"disks"`
+	Serials                []string       `mapstructure:"serials"`
+	Agent                  config.Trilean `mapstructure:"qemu_agent"`
+	SCSIController         string         `mapstructure:"scsi_controller"`
+	Onboot                 bool           `mapstructure:"onboot"`
+	DisableKVM             bool           `mapstructure:"disable_kvm"`
+	ProxmoxDefaultBehavior bool           `mapstructure:"proxmox_default_behavior"`
 
 	TemplateName        string `mapstructure:"template_name"`
 	TemplateDescription string `mapstructure:"template_description"`
@@ -191,26 +192,26 @@ func (c *Config) Prepare(upper interface{}, raws ...interface{}) ([]string, []st
 		// Default to packer-[time-ordered-uuid]
 		c.VMName = fmt.Sprintf("packer-%s", uuid.TimeOrderedUUID())
 	}
-	if c.Memory < 16 {
+	if c.Memory < 16 && !c.ProxmoxDefaultBehavior {
 		log.Printf("Memory %d is too small, using default: 512", c.Memory)
 		c.Memory = 512
 	}
 	if c.Memory < c.BalloonMinimum {
 		errs = packersdk.MultiErrorAppend(errs, fmt.Errorf("ballooning_minimum (%d) must be lower than memory (%d)", c.BalloonMinimum, c.Memory))
 	}
-	if c.Cores < 1 {
+	if c.Cores < 1 && !c.ProxmoxDefaultBehavior {
 		log.Printf("Number of cores %d is too small, using default: 1", c.Cores)
 		c.Cores = 1
 	}
-	if c.Sockets < 1 {
+	if c.Sockets < 1 && !c.ProxmoxDefaultBehavior {
 		log.Printf("Number of sockets %d is too small, using default: 1", c.Sockets)
 		c.Sockets = 1
 	}
-	if c.CPUType == "" {
+	if c.CPUType == "" && !c.ProxmoxDefaultBehavior {
 		log.Printf("CPU type not set, using default 'kvm64'")
 		c.CPUType = "kvm64"
 	}
-	if c.OS == "" {
+	if c.OS == "" && !c.ProxmoxDefaultBehavior {
 		log.Printf("OS not set, using default 'other'")
 		c.OS = "other"
 	}

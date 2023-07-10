@@ -107,6 +107,7 @@ type FlatConfig struct {
 	SCSIController            *string                    `mapstructure:"scsi_controller" cty:"scsi_controller" hcl:"scsi_controller"`
 	Onboot                    *bool                      `mapstructure:"onboot" cty:"onboot" hcl:"onboot"`
 	DisableKVM                *bool                      `mapstructure:"disable_kvm" cty:"disable_kvm" hcl:"disable_kvm"`
+	ProxmoxDefaultBehavior    *bool                      `mapstructure:"proxmox_default_behavior" cty:"proxmox_default_behavior" hcl:"proxmox_default_behavior"`
 	TemplateName              *string                    `mapstructure:"template_name" cty:"template_name" hcl:"template_name"`
 	TemplateDescription       *string                    `mapstructure:"template_description" cty:"template_description" hcl:"template_description"`
 	CloudInit                 *bool                      `mapstructure:"cloud_init" cty:"cloud_init" hcl:"cloud_init"`
@@ -224,6 +225,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"scsi_controller":              &hcldec.AttrSpec{Name: "scsi_controller", Type: cty.String, Required: false},
 		"onboot":                       &hcldec.AttrSpec{Name: "onboot", Type: cty.Bool, Required: false},
 		"disable_kvm":                  &hcldec.AttrSpec{Name: "disable_kvm", Type: cty.Bool, Required: false},
+		"proxmox_default_behavior":     &hcldec.AttrSpec{Name: "proxmox_default_behavior", Type: cty.Bool, Required: false},
 		"template_name":                &hcldec.AttrSpec{Name: "template_name", Type: cty.String, Required: false},
 		"template_description":         &hcldec.AttrSpec{Name: "template_description", Type: cty.String, Required: false},
 		"cloud_init":                   &hcldec.AttrSpec{Name: "cloud_init", Type: cty.Bool, Required: false},
