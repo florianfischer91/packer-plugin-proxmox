@@ -30,6 +30,13 @@ func (s *stepConvertToTemplate) Run(ctx context.Context, state multistep.StateBa
 	ui := state.Get("ui").(packersdk.Ui)
 	client := state.Get("proxmoxClient").(templateConverter)
 	vmRef := state.Get("vmRef").(*proxmox.VmRef)
+	c := state.Get("config").(*Config)
+
+	if c.SkipConvertToTemplate.True() {
+		ui.Say("Skipping VM template conversion")
+		state.Put("template_id", vmRef.VmId())
+		return multistep.ActionContinue
+	}
 
 	ui.Say("Stopping VM")
 	_, err := client.ShutdownVm(vmRef)

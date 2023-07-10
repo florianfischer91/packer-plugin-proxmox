@@ -70,8 +70,9 @@ type Config struct {
 	DisableKVM             bool           `mapstructure:"disable_kvm"`
 	ProxmoxDefaultBehavior bool           `mapstructure:"proxmox_default_behavior"`
 
-	TemplateName        string `mapstructure:"template_name"`
-	TemplateDescription string `mapstructure:"template_description"`
+	TemplateName          string         `mapstructure:"template_name"`
+	TemplateDescription   string         `mapstructure:"template_description"`
+	SkipConvertToTemplate config.Trilean `mapstructure:"skip_convert_to_template"`
 
 	CloudInit            bool   `mapstructure:"cloud_init"`
 	CloudInitStoragePool string `mapstructure:"cloud_init_storage_pool"`
